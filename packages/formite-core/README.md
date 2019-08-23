@@ -45,29 +45,21 @@ const SampleForm = () => {
     );
     return (
         <form onSubmit={handleSubmit}>
-            <p>
-                <input
-                    type="text"
-                    value={fields.firstName.value}
-                    onBlur={firstNameField.handleBlur}
-                    onChange={handleFirstNameChange}
-                />
-                <span>{fields.firstName.error}</span>
-            </p>
-            <p>
-                <input
-                    type="text"
-                    value={fields.lastName.value}
-                    onBlur={lastNameField.handleBlur}
-                    onChange={handleLastNameChange}
-                />
-                <span>{fields.lastName.error}</span>
-            </p>
-            <p>
-                <button type="submit" disabled={!canSubmit}>
-                    Submit
-                </button>
-            </p>
+            <input
+                type="text"
+                value={fields.firstName.value}
+                onBlur={firstNameField.handleBlur}
+                onChange={handleFirstNameChange}
+            />
+            <span>{fields.firstName.error}</span>
+            <input
+                type="text"
+                value={fields.lastName.value}
+                onBlur={lastNameField.handleBlur}
+                onChange={handleLastNameChange}
+            />
+            <span>{fields.lastName.error}</span>
+            <button type="submit" disabled={!canSubmit}>Submit</button>
             <p>{"Is dirty: " + isDirty}</p>
             <p>{"Form errors: " + formErrors.join(", ")}</p>
         </form>
