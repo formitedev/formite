@@ -9,6 +9,13 @@
   ],
   "author": "joerneu <31096117+joerneu@users.noreply.github.com>",
   "homepage": "http://www.formite.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/formitedev/formite"
+  },
+  "bugs": {
+    "url": "https://github.com/formitedev/formite"
+  },
   "license": "MIT",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
