@@ -21,8 +21,6 @@
     "build": "npm run build-lib && npm run build-dist",
     "build-dist": "rollup -c",
     "build-lib": "tsc -p ./tsconfig.build.json",
-    "pack": "npm pack",
-    "prepare": "npm run build",
     "pretest": "tsc --noEmit",
     "watch-dist": "rollup -cw",
     "watch-lib": "tsc -p ./tsconfig.build.json -w"
@@ -39,5 +37,5 @@
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
   },
-  "gitHead": "af163f0e3ec4a39620f1126bb225bb74a42a770c"
+  "gitHead": "03d5a3590a390e3f676c8effde89a966f62d0548"
 }

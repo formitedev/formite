@@ -6,6 +6,7 @@
   ],
   "scripts": {
     "build": "lerna run build",
+    "publish": "lerna run build && lerna publish",
     "storybook": "start-storybook -p 5001",
     "test": "lerna run pretest && jest"
   },
