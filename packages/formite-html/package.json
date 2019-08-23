@@ -33,8 +33,9 @@
     "react": ">=16.8.0"
   },
   "peerDependencies": {
-    "formite-core": "^0.1.0",
+    "formite-core": "^0.2.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"
-  }
+  },
+  "gitHead": "af163f0e3ec4a39620f1126bb225bb74a42a770c"
 }
