@@ -15,12 +15,12 @@ const required = (v: unknown) => (v ? "" : "Required field");
 
 const handleValidateForm = (values: Person) => {
     if (!values.firstName && !values.lastName) {
-        return ["Missing names"];
+        return ["Missing first and last names"];
     }
     return [];
 };
 
-const submitValues = async (values: Person) => {
+const submitValues = (values: Person) => {
     logSubmitted(values);
 };
 
@@ -36,6 +36,14 @@ const SampleForm = () => {
     );
     const firstNameField = useField(form, fields.firstName, required);
     const lastNameField = useField(form, fields.lastName, required);
+    const handleFirstNameChange = useCallback(
+        (ev: React.ChangeEvent<HTMLInputElement>) => firstNameField.handleChange(ev.currentTarget.value),
+        [firstNameField]
+    );
+    const handleLastNameChange = useCallback(
+        (ev: React.ChangeEvent<HTMLInputElement>) => lastNameField.handleChange(ev.currentTarget.value),
+        [lastNameField]
+    );
     return (
         <form onSubmit={handleSubmit}>
             <p>
@@ -43,7 +51,7 @@ const SampleForm = () => {
                     type="text"
                     value={fields.firstName.value}
                     onBlur={firstNameField.handleBlur}
-                    onChange={ev => firstNameField.handleChange(ev.currentTarget.value)}
+                    onChange={handleFirstNameChange}
                 />
                 <span>{fields.firstName.error}</span>
             </p>
@@ -52,7 +60,7 @@ const SampleForm = () => {
                     type="text"
                     value={fields.lastName.value}
                     onBlur={lastNameField.handleBlur}
-                    onChange={ev => lastNameField.handleChange(ev.currentTarget.value)}
+                    onChange={handleLastNameChange}
                 />
                 <span>{fields.lastName.error}</span>
             </p>
