@@ -1,0 +1,40 @@
+{
+  "name": "formite-html",
+  "version": "0.1.0",
+  "description": "Easy forms with React hooks and HTML inputs",
+  "keywords": [
+    "react",
+    "forms",
+    "hooks"
+  ],
+  "author": "joerneu <31096117+joerneu@users.noreply.github.com>",
+  "homepage": "http://www.formite.org",
+  "license": "MIT",
+  "types": "dist/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "files": [
+    "dist/*",
+    "lib/*"
+  ],
+  "scripts": {
+    "build": "npm run build-lib && npm run build-dist",
+    "build-dist": "rollup -c",
+    "build-lib": "tsc -p ./tsconfig.build.json",
+    "pack": "npm pack",
+    "prepare": "npm run build",
+    "pretest": "tsc --noEmit",
+    "watch-dist": "rollup -cw",
+    "watch-lib": "tsc -p ./tsconfig.build.json -w"
+  },
+  "devDependencies": {
+    "formite-core": "^0.1.0",
+    "formite-sample": "^0.1.0",
+    "react": ">=16.8.0"
+  },
+  "peerDependencies": {
+    "formite-core": "^0.1.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  }
+}

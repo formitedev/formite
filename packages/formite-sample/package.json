@@ -1,0 +1,20 @@
+{
+  "name": "formite-sample",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Formite sample types and data",
+  "author": "joerneu <31096117+joerneu@users.noreply.github.com>",
+  "homepage": "http://www.formite.org",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  }
+}
