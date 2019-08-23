@@ -1,6 +1,6 @@
 {
   "name": "formite-core",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Easy forms with React hooks",
   "keywords": [
     "react",
@@ -28,7 +28,7 @@
     "watch-lib": "tsc -p ./tsconfig.build.json -w"
   },
   "devDependencies": {
-    "formite-sample": "^0.1.0",
+    "formite-sample": "^0.2.0",
     "react": ">=16.8.0"
   },
   "peerDependencies": {

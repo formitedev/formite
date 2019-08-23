@@ -1,6 +1,6 @@
 {
   "name": "formite-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Easy forms with React components",
   "keywords": [
     "react",
@@ -28,9 +28,9 @@
     "watch-lib": "tsc -p ./tsconfig.build.json -w"
   },
   "devDependencies": {
-    "formite-core": "^0.1.0",
-    "formite-html": "^0.1.0",
-    "formite-sample": "^0.1.0",
+    "formite-core": "^0.2.0",
+    "formite-html": "^0.2.0",
+    "formite-sample": "^0.2.0",
     "react": ">=16.8.0"
   },
   "peerDependencies": {
