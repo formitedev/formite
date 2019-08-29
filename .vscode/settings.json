@@ -11,5 +11,15 @@
             "language": "typescriptreact",
             "autoFix": true
         }
-    ]
+    ],
+    "files.associations": {
+        "*.json": "jsonc"
+    },
+    "files.exclude": {
+        "**/build": true,
+        "**/dist": true,
+        "**/docs": true,
+        "**/lib": true,
+        "**/temp": true
+    }
 }

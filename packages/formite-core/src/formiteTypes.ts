@@ -1,7 +1,7 @@
 import { Field } from "./Field";
 
 /**
- * @private
+ * @internal
  */
 export type FormFieldHandler = {
     handleFieldBlur: (field: Field<unknown>) => void;

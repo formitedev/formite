@@ -3,5 +3,7 @@ logs
 node_modules/
 build
 dist
+temp
 packages/*/lib
+packages/*/docs
 coverage

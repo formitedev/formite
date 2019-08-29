@@ -8,7 +8,7 @@
     "hooks"
   ],
   "author": "joerneu <31096117+joerneu@users.noreply.github.com>",
-  "homepage": "http://www.formite.org",
+  "homepage": "https://www.formite.org",
   "repository": {
     "type": "git",
     "url": "https://github.com/formitedev/formite"
@@ -17,7 +17,7 @@
     "url": "https://github.com/formitedev/formite"
   },
   "license": "MIT",
-  "types": "dist/index.d.ts",
+  "types": "dist/formite-html.d.ts",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "files": [
@@ -25,9 +25,11 @@
     "lib/*"
   ],
   "scripts": {
-    "build": "npm run build-lib && npm run build-dist",
+    "build": "npm run build-lib && npm run extract-api && npm run build-dist",
     "build-dist": "rollup -c",
     "build-lib": "tsc -p ./tsconfig.build.json",
+    "extract-api": "api-extractor run --local",
+    "generate-api-docs": "api-documenter markdown --input-folder ./temp --output-folder ./docs",
     "pretest": "tsc --noEmit",
     "watch-dist": "rollup -cw",
     "watch-lib": "tsc -p ./tsconfig.build.json -w"

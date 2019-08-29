@@ -1,17 +1,41 @@
 import { FormFieldHandler, ValidateFieldHandler } from "./formiteTypes";
 
 export class Field<T> {
+    /**
+     * @internal
+     */
     private _error?: string;
+
+    /**
+     * @internal
+     */
     private _initialValue: T;
+
+    /**
+     * @internal
+     */
     private _validatingCounter: number;
+
+    /**
+     * @internal
+     */
     private _onValidate?: ValidateFieldHandler;
+
+    /**
+     * @internal
+     */
     private _touched: boolean;
+
+    /**
+     * @internal
+     */
     private _value: T;
 
     /**
-     * @private
+     * @internal
      */
     public _handler!: FormFieldHandler;
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public metadata: any;
 
@@ -43,22 +67,45 @@ export class Field<T> {
         this._touched = false;
         this._value = value;
     }
-    // Internal methods
+
+    /**
+     * @internal
+     */
     public _endValidating() {
         this._validatingCounter--;
     }
+
+    /**
+     * @internal
+     */
     public _setError(error: string | undefined) {
         this._error = error;
     }
+
+    /**
+     * @internal
+     */
     public _setOnValidate(onValidate: ValidateFieldHandler) {
         this._onValidate = onValidate;
     }
+
+    /**
+     * @internal
+     */
     public _setTouched(touched: boolean) {
         this._touched = touched;
     }
+
+    /**
+     * @internal
+     */
     public _setValue(value: T) {
         this._value = value;
     }
+
+    /**
+     * @internal
+     */
     public _startValidating() {
         this._validatingCounter++;
     }

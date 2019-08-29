@@ -2,7 +2,9 @@ import { terser } from "rollup-plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 
 function toCamelCase(str) {
-    return str.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); });
+    return str.replace(/-([a-z])/g, function(g) {
+        return g[1].toUpperCase();
+    });
 }
 
 function typescriptPlugin() {
@@ -15,10 +17,7 @@ function typescriptPlugin() {
 
 export default function rollupConfig(pkg) {
     var input = "src/index.ts";
-    var external = [
-        ...Object.keys(pkg.dependencies || {}),
-        ...Object.keys(pkg.peerDependencies || {})
-    ];
+    var external = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})];
     return [
         {
             input,
@@ -31,25 +30,22 @@ export default function rollupConfig(pkg) {
                 }
             ],
             external,
-            plugins: [
-                typescriptPlugin(),
-                terser()
-            ],
+            plugins: [typescriptPlugin(), terser()]
         },
         {
             input,
             output: [
                 {
                     file: pkg.main,
-                    format: "cjs",
+                    format: "cjs"
                 },
                 {
                     file: pkg.module,
-                    format: "esm",
-                },
+                    format: "esm"
+                }
             ],
             external,
-            plugins: [typescriptPlugin()],
+            plugins: [typescriptPlugin()]
         }
     ];
 }

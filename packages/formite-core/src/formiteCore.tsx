@@ -368,11 +368,15 @@ export function useForm<Values extends FieldValues = FieldValues>(
     };
 }
 
-export function useField(field: Field<unknown>, onValidate?: ValidateFieldHandler): FormiteField {
-    const { handleFieldBlur, handleFieldChange } = field._handler;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useField(field: Field<unknown>, onValidate?: ValidateFieldHandler, metadata?: any): FormiteField {
     if (onValidate && field.onValidate !== onValidate) {
         field._setOnValidate(onValidate);
     }
+    if (metadata && field.metadata !== metadata) {
+        field.metadata = metadata;
+    }
+    const { handleFieldBlur, handleFieldChange } = field._handler;
     const handleBlur = useCallback(() => handleFieldBlur(field), [field, handleFieldBlur]);
     const handleChange = useCallback((v: unknown) => handleFieldChange(field, v), [field, handleFieldChange]);
     return {
