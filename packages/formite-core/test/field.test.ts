@@ -44,7 +44,7 @@ describe("Formite Field", () => {
         const handleValidateField = jest.fn().mockReturnValue("Field error");
         const { result, waitForNextUpdate } = renderHook(() => {
             const form = useForm(SampleValues, noop, { validateInitialValues: false });
-            const firstNameField = useField(form, form.fields.firstName, handleValidateField);
+            const firstNameField = useField(form.fields.firstName, handleValidateField);
             return { form, firstNameField };
         });
         act(() => {
@@ -62,7 +62,7 @@ describe("Formite Field", () => {
         const handleValidateField = jest.fn().mockReturnValue("Field error");
         const { result, waitForNextUpdate } = renderHook(() => {
             const form = useForm(SampleValues, noop, { validateInitialValues: false, onValidate: handleValidateForm });
-            const firstNameField = useField(form, form.fields.firstName, handleValidateField);
+            const firstNameField = useField(form.fields.firstName, handleValidateField);
             return { form, firstNameField };
         });
         act(() => {
@@ -81,8 +81,8 @@ describe("Formite Field", () => {
         const handleValidateField = jest.fn().mockReturnValue("Field error");
         const { result } = renderHook(() => {
             const form = useForm(SampleValues, noop, { validateInitialValues: false });
-            const firstNameField = useField(form, form.fields.firstName, handleValidateField);
-            const lastNameField = useField(form, form.fields.lastName);
+            const firstNameField = useField(form.fields.firstName, handleValidateField);
+            const lastNameField = useField(form.fields.lastName);
             return { form, firstNameField, lastNameField };
         });
         await actAsync(async () => {
@@ -102,7 +102,7 @@ describe("Formite Field", () => {
     test("handleBlur() sets touched", () => {
         const { result } = renderHook(() => {
             const form = useForm(SampleValues, noop);
-            const firstNameField = useField(form, form.fields.firstName);
+            const firstNameField = useField(form.fields.firstName);
             return { form, firstNameField };
         });
         expect(result.current.form.fields.firstName.touched).toBe(false);

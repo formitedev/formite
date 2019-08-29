@@ -36,8 +36,11 @@ const submitValues = async (values: Person) => {
 };
 
 const AsyncForm = () => {
-    const form = useForm({ firstName: "", lastName: "" }, submitValues, { onValidate: handleValidateForm });
-    const { canSubmit, fields, formErrors, isSubmitting, isValid, isValidating, setFieldValue, submit } = form;
+    const { canSubmit, fields, formErrors, isSubmitting, isValid, isValidating, setFieldValue, submit } = useForm(
+        { firstName: "", lastName: "" },
+        submitValues,
+        { onValidate: handleValidateForm }
+    );
     // Simulate loading of data
     const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
@@ -56,8 +59,8 @@ const AsyncForm = () => {
         },
         [submit]
     );
-    const firstNameField = useField(form, fields.firstName, asyncRequired);
-    const lastNameField = useField(form, fields.lastName, asyncRequired);
+    const firstNameField = useField(fields.firstName, asyncRequired);
+    const lastNameField = useField(fields.lastName, asyncRequired);
     if (isLoading) {
         return <p>Loading...</p>;
     }

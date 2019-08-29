@@ -18,12 +18,11 @@ const handleSubmit = (values: unknown) => {
 };
 
 const SimpleForm = () => {
-    const form = useForm({ firstName: "", lastName: "" }, handleSubmit);
-    const { canSubmit, fields, Form, isDirty } = form;
+    const { canSubmit, fields, Form, isDirty } = useForm({ firstName: "", lastName: "" }, handleSubmit);
     return (
         <Form className="pure-form pure-form-stacked">
-            <input type="text" placeholder="First name" {...useInput(form, fields.firstName)} />
-            <input type="text" placeholder="Last name" {...useInput(form, fields.lastName)} />
+            <input type="text" placeholder="First name" {...useInput(fields.firstName)} />
+            <input type="text" placeholder="Last name" {...useInput(fields.lastName)} />
             <button type="submit" className="pure-button pure-button-primary" disabled={!(canSubmit && isDirty)}>
                 Save
             </button>

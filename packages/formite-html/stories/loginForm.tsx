@@ -20,20 +20,19 @@ const handleSubmit = (values: unknown) => {
 };
 
 const LoginForm = () => {
-    const form = useForm({ email: "", password: "", remember: false }, handleSubmit);
-    const { canSubmit, fields, Form, isDirty } = form;
+    const { canSubmit, fields, Form, isDirty } = useForm({ email: "", password: "", remember: false }, handleSubmit);
     return (
         <Form className="pure-form pure-form-stacked">
             <fieldset>
                 <legend>Login form</legend>
                 <label>Email</label>
-                <input type="text" {...useInput(form, fields.email, required)} />
+                <input type="text" {...useInput(fields.email, required)} />
                 <span className="pure-form-message">{fields.email.visibleError}</span>
                 <label>Password</label>
-                <input type="password" {...useInput(form, fields.password, required)} />
+                <input type="password" {...useInput(fields.password, required)} />
                 <span className="pure-form-message">{fields.password.visibleError}</span>
                 <label className="pure-checkbox">
-                    <input {...useCheckbox(form, fields.remember)} />
+                    <input {...useCheckbox(fields.remember)} />
                     <span> Remember me</span>
                 </label>
             </fieldset>

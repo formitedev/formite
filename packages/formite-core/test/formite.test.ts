@@ -62,7 +62,7 @@ describe("Formite Core", () => {
         const handleValidateField = jest.fn();
         const { result, waitForNextUpdate } = renderHook(() => {
             const form = useForm(SampleValues, noop, { onValidate: handleValidate });
-            useField(form, form.fields.firstName, handleValidateField);
+            useField(form.fields.firstName, handleValidateField);
             return form;
         });
         expect(result.current.isValid).toBe(false);
@@ -170,12 +170,15 @@ describe("Formite Core", () => {
         const handleSubmit = jest.fn();
         const {
             result: {
-                current: { fields, setFieldValidation, setFieldValue, submit }
+                current: { fields, setFieldValue, submit }
             }
-        } = renderHook(() => useForm(SampleValues, handleSubmit, { validateInitialValues: false }));
+        } = renderHook(() => {
+            const form = useForm(SampleValues, handleSubmit, { validateInitialValues: false });
+            useField(form.fields.firstName, handleValidateField);
+            return form;
+        });
         let wasSubmitted = false;
         await actAsync(async () => {
-            setFieldValidation(fields.firstName, handleValidateField);
             setFieldValue(fields.firstName, "");
             wasSubmitted = await submit();
         });

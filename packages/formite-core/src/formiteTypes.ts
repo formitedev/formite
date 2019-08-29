@@ -1,3 +1,13 @@
+import { Field } from "./Field";
+
+/**
+ * @private
+ */
+export type FormFieldHandler = {
+    handleFieldBlur: (field: Field<unknown>) => void;
+    handleFieldChange: (field: Field<unknown>, v: unknown) => void;
+};
+
 export type ValidateFieldHandler = (value: unknown) => string | undefined | Promise<string | undefined>;
 
 export type ValidateFormHandler<VALUES> = (
@@ -5,81 +15,6 @@ export type ValidateFormHandler<VALUES> = (
     fields: Fields<VALUES>,
     setFieldError: (field: Field<unknown>, error?: string) => void
 ) => string[] | Promise<string[]>;
-
-export class Field<T> {
-    private _error?: string;
-    private _initialValue: T;
-    private _validatingCounter: number;
-    private _onValidate?: ValidateFieldHandler;
-    private _touched: boolean;
-    private _value: T;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    public metadata: any;
-
-    // Readonly properties
-
-    public get error() {
-        return this._error;
-    }
-
-    public get initialValue() {
-        return this._initialValue;
-    }
-
-    public get isValidating() {
-        return this._validatingCounter > 0;
-    }
-
-    public get onValidate() {
-        return this._onValidate;
-    }
-
-    public get touched() {
-        return this._touched;
-    }
-
-    public get value() {
-        return this._value;
-    }
-
-    public get visibleError() {
-        return this._touched ? this._error : "";
-    }
-
-    public constructor(public readonly name: string, value: T) {
-        this._initialValue = value;
-        this._validatingCounter = 0;
-        this._touched = false;
-        this._value = value;
-    }
-
-    // Internal methods
-
-    public _endValidating() {
-        this._validatingCounter--;
-    }
-
-    public _setError(error: string | undefined) {
-        this._error = error;
-    }
-
-    public _setOnValidate(onValidate: ValidateFieldHandler) {
-        this._onValidate = onValidate;
-    }
-
-    public _setTouched(touched: boolean) {
-        this._touched = touched;
-    }
-
-    public _setValue(value: T) {
-        this._value = value;
-    }
-
-    public _startValidating() {
-        this._validatingCounter++;
-    }
-}
 
 export interface FieldValues {
     [field: string]: unknown;
@@ -103,6 +38,11 @@ export type FormOptions<Values extends FieldValues> = {
     onValidate?: ValidateFormHandler<Values>;
 };
 
+export interface FormiteField {
+    handleBlur: () => void;
+    handleChange: (v: unknown) => void;
+}
+
 export interface FormiteForm<Values extends FieldValues = FieldValues> {
     readonly canSubmit: boolean;
     readonly fields: Fields<Values>;
@@ -114,7 +54,6 @@ export interface FormiteForm<Values extends FieldValues = FieldValues> {
     readonly isValid: boolean;
     readonly isValidating: boolean;
     reset: () => void;
-    setFieldValidation: (field: Field<unknown>, onValidate: ValidateFieldHandler) => void;
     setFieldTouched: (field: Field<unknown>, touched: boolean) => void;
     setFieldValue: (field: Field<unknown>, v: unknown, validate?: boolean) => Promise<boolean>;
     submit: () => Promise<boolean>;

@@ -40,15 +40,17 @@ const submitValues = async (values: Person) => {
 };
 
 const AsyncForm = () => {
-    const form = useForm({ firstName: "Peter", lastName: "Smith" }, submitValues, { onValidate: handleValidateForm });
-    const { canSubmit, Form, fields, formErrors, isDirty, setFieldValue, isSubmitting } = form;
-    console.log("Rendering");
+    const { canSubmit, Form, fields, formErrors, isDirty, setFieldValue, isSubmitting } = useForm(
+        { firstName: "Peter", lastName: "Smith" },
+        submitValues,
+        { onValidate: handleValidateForm }
+    );
     return (
         <Form className="pure-form pure-form-stacked">
             <fieldset>
                 <legend>Async form</legend>
                 <label>First name</label>
-                <input type="text" {...useInput(form, fields.firstName, asyncRequired)} />
+                <input type="text" {...useInput(fields.firstName, asyncRequired)} />
                 <span className="pure-form-message">
                     {fields.firstName.isValidating
                         ? "Is validating"
@@ -57,7 +59,7 @@ const AsyncForm = () => {
                         : "*"}
                 </span>
                 <label>Last name</label>
-                <input type="text" {...useInput(form, fields.lastName, asyncRequired)} />
+                <input type="text" {...useInput(fields.lastName, asyncRequired)} />
                 <span className="pure-form-message">
                     {fields.lastName.isValidating
                         ? "Is validating"

@@ -24,8 +24,11 @@ const submitValues = (values: unknown) => {
 };
 
 const SampleForm = () => {
-    const form = useForm({ firstName: "Peter", lastName: "Smith" }, submitValues);
-    const { canSubmit, fields, isDirty, submit } = form;
+    const { canSubmit, fields, formErrors, isDirty, submit } = useForm(
+        { firstName: "Peter", lastName: "Smith" },
+        submitValues,
+        { onValidate: handleValidateForm }
+    );
     const handleSubmit = useCallback(
         (ev: React.FormEvent<HTMLFormElement>) => {
             ev.preventDefault();
@@ -33,8 +36,8 @@ const SampleForm = () => {
         },
         [submit]
     );
-    const firstNameField = useField(form, fields.firstName, required);
-    const lastNameField = useField(form, fields.lastName, required);
+    const firstNameField = useField(fields.firstName, required);
+    const lastNameField = useField(fields.lastName, required);
     const handleFirstNameChange = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => firstNameField.handleChange(ev.currentTarget.value),
         [firstNameField]

@@ -50,13 +50,8 @@ interface ElementWithValue extends Element {
     value: unknown;
 }
 
-function useCheckedController<Values extends FieldValues, E extends ElementWithChecked>(
-    form: FormiteForm<Values>,
-    field: Field<unknown>,
-    onValidate?: ValidateFieldHandler
-) {
-    onValidate && form.setFieldValidation(field, onValidate);
-    const formField = useField(form, field);
+function useCheckedController<E extends ElementWithChecked>(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
+    const formField = useField(field, onValidate);
     const onChange = useCallback((ev: React.ChangeEvent<E>) => formField.handleChange(ev.target.checked), [formField]);
     return {
         checked: field.value as boolean | undefined,
@@ -65,13 +60,8 @@ function useCheckedController<Values extends FieldValues, E extends ElementWithC
     };
 }
 
-function useValueController<Values extends FieldValues, E extends ElementWithValue, T>(
-    form: FormiteForm<Values>,
-    field: Field<unknown>,
-    onValidate?: ValidateFieldHandler
-) {
-    onValidate && form.setFieldValidation(field, onValidate);
-    const formField = useField(form, field);
+function useValueController<E extends ElementWithValue, T>(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
+    const formField = useField(field, onValidate);
     const onChange = useCallback((ev: React.ChangeEvent<E>) => formField.handleChange(ev.target.value), [formField]);
     return {
         value: field.value as T,
@@ -80,44 +70,26 @@ function useValueController<Values extends FieldValues, E extends ElementWithVal
     };
 }
 
-export function useCheckbox<Values extends FieldValues = FieldValues>(
-    form: FormiteForm<Values>,
-    field: Field<unknown>,
-    onValidate?: ValidateFieldHandler
-) {
-    return { type: "checkbox", ...useCheckedController<Values, HTMLInputElement>(form, field, onValidate) };
+export function useCheckbox(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
+    return { type: "checkbox", ...useCheckedController<HTMLInputElement>(field, onValidate) };
 }
 
 export type FormiteCheckbox = Readonly<ReturnType<typeof useCheckbox>>;
 
-export function useInput<Values extends FieldValues = FieldValues>(
-    form: FormiteForm<Values>,
-    field: Field<unknown>,
-    onValidate?: ValidateFieldHandler
-) {
-    return useValueController<Values, HTMLInputElement, string | undefined>(form, field, onValidate);
+export function useInput(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
+    return useValueController<HTMLInputElement, string | undefined>(field, onValidate);
 }
 
 export type FormiteInput = Readonly<ReturnType<typeof useInput>>;
 
-export function useSelect<Values extends FieldValues = FieldValues>(
-    form: FormiteForm<Values>,
-    field: Field<unknown>,
-    onValidate?: ValidateFieldHandler
-) {
-    return useValueController<Values, HTMLSelectElement, string | string[] | undefined>(form, field, onValidate);
+export function useSelect(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
+    return useValueController<HTMLSelectElement, string | string[] | undefined>(field, onValidate);
 }
 
 export type FormiteSelect = Readonly<ReturnType<typeof useSelect>>;
 
-export function useRadioButton<Values extends FieldValues>(
-    form: FormiteForm<Values>,
-    field: Field<unknown>,
-    value: string | number,
-    onValidate?: ValidateFieldHandler
-) {
-    onValidate && form.setFieldValidation(field, onValidate);
-    const formField = useField(form, field);
+export function useRadioButton(field: Field<unknown>, value: string | number, onValidate?: ValidateFieldHandler) {
+    const formField = useField(field, onValidate);
     const onChange = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
             ev.target.checked && formField.handleChange(value);

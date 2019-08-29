@@ -11,7 +11,7 @@ import { formStyle } from "../../../.storybook/styles";
 
 import { Fields } from "formite-core";
 
-import { FormiteHtmlForm, useForm, useInput, useSelect } from "../src"; // "formite-html"
+import { useForm, useInput, useSelect } from "../src"; // "formite-html"
 
 import { AddressType, SampleType, SampleValues } from "formite-sample";
 
@@ -23,16 +23,16 @@ const handleSubmit = (values: SampleType) => {
     logSubmitted(values);
 };
 
-const AddressForm = (props: { caption: string; address: Fields<AddressType>; form: FormiteHtmlForm<SampleType> }) => {
-    const { caption, address, form } = props;
+const AddressForm = (props: { caption: string; address: Fields<AddressType> }) => {
+    const { caption, address } = props;
     return (
         <fieldset>
             <legend>{caption}</legend>
             <label>City</label>
-            <input type="text" {...useInput(form, address.city, required)} />
+            <input type="text" {...useInput(address.city, required)} />
             <span className="pure-form-message">{address.city.visibleError ? address.city.visibleError : "*"}</span>
             <label>Country</label>
-            <select {...useSelect(form, address.country)}>
+            <select {...useSelect(address.country)}>
                 <option value="Canada">Canada</option>
                 <option value="Germany">Germany</option>
                 <option value="USA">USA</option>
@@ -42,12 +42,11 @@ const AddressForm = (props: { caption: string; address: Fields<AddressType>; for
 };
 
 const SubForm = () => {
-    const form = useForm(SampleValues, handleSubmit);
-    const { canSubmit, Form, fields, formErrors, isDirty, isSubmitting } = form;
+    const { canSubmit, Form, fields, formErrors, isDirty, isSubmitting } = useForm(SampleValues, handleSubmit);
     return (
         <Form className="pure-form pure-form-stacked">
-            <AddressForm address={fields.invoiceAddress} caption="Invoice address" form={form} />
-            <AddressForm address={fields.shippingAddress} caption="Shipping address" form={form} />
+            <AddressForm address={fields.invoiceAddress} caption="Invoice address" />
+            <AddressForm address={fields.shippingAddress} caption="Shipping address" />
             <button type="submit" className="pure-button pure-button-primary" disabled={!(canSubmit && isDirty)}>
                 Save
             </button>

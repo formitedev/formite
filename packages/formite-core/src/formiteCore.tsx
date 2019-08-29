@@ -1,6 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 
-import { Field, Fields, FieldValues, FormiteForm, FormOptions, ValidateFieldHandler } from "./formiteTypes";
+import {
+    FormFieldHandler,
+    Fields,
+    FieldValues,
+    FormiteForm,
+    FormOptions,
+    ValidateFieldHandler,
+    FormiteField
+} from "./formiteTypes";
+import { Field } from "./Field";
 
 function isValuesObject<VALUES extends FieldValues = FieldValues>(obj: unknown): obj is VALUES {
     return obj !== null && typeof obj === "object";
@@ -19,6 +28,17 @@ function isPromise<T>(p: any): p is Promise<T> {
     return p !== null && typeof p === "object" && typeof p.then === "function";
 }
 
+/**
+ * Creates Field instances for all properties of the given object.
+ *
+ * @remarks
+ * Makes a deep copy of all values and arrays and creates new Field instances. This function
+ * is only used when using dynamic forms.
+ *
+ * @param object - An object whose properties will be converted to Field instances.
+ * @returns An object with Fields and arrays of Fields with the same structure as the input object.
+ *
+ */
 export function createFields<VALUES extends FieldValues>(object: VALUES): Fields<VALUES> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = {};
@@ -35,6 +55,21 @@ export function createFields<VALUES extends FieldValues>(object: VALUES): Fields
         result[key] = field;
     }
     return result;
+}
+
+function setHandler<VALUES extends FieldValues = FieldValues>(fields: Fields<VALUES>, handler: FormFieldHandler) {
+    for (const key of Object.keys(fields)) {
+        const field = fields[key];
+        if (field instanceof Field) {
+            field._handler = handler;
+        } else if (isArrayWithFields(field)) {
+            for (const f of field) {
+                setHandler(f, handler);
+            }
+        } else if (isObjectWithFields(field)) {
+            setHandler(field, handler);
+        }
+    }
 }
 
 function getValues<VALUES extends FieldValues = FieldValues>(fields: Fields<VALUES>): VALUES {
@@ -137,7 +172,7 @@ export function useForm<Values extends FieldValues = FieldValues>(
     // Internal helper that is called when a Field instance has been changed
     const fieldsUpdated = useCallback(() => {
         setUpdateCounter(current => current + 1);
-    }, [setUpdateCounter]);
+    }, []);
     const reset = useCallback(() => {
         setFields(createFields(initialValues));
         setFormErrors([] as string[]);
@@ -227,11 +262,6 @@ export function useForm<Values extends FieldValues = FieldValues>(
         }
         return isValid;
     }, [fields, validateForm]);
-    const setFieldValidation = useCallback((field: Field<unknown>, onValidate: ValidateFieldHandler) => {
-        if (field.onValidate !== onValidate) {
-            field._setOnValidate(onValidate);
-        }
-    }, []);
     const setFieldTouched = useCallback(
         (field: Field<unknown>, touched: boolean) => {
             if (touched !== field.touched) {
@@ -305,6 +335,14 @@ export function useForm<Values extends FieldValues = FieldValues>(
             validate();
         }
     }, [onValidate, validate, validateInitialValues]);
+    useMemo(() => {
+        const handler = {
+            handleFieldBlur,
+            handleFieldChange
+        };
+        setHandler(fields, handler);
+        return handler;
+    }, [fields, handleFieldBlur, handleFieldChange]);
     return {
         fields,
         formErrors,
@@ -313,7 +351,6 @@ export function useForm<Values extends FieldValues = FieldValues>(
         isSubmitting,
         isValid,
         reset,
-        setFieldValidation,
         setFieldTouched,
         setFieldValue,
         submit,
@@ -331,13 +368,11 @@ export function useForm<Values extends FieldValues = FieldValues>(
     };
 }
 
-export function useField<Values extends FieldValues = FieldValues>(
-    form: FormiteForm<Values>,
-    field: Field<unknown>,
-    onValidate?: ValidateFieldHandler
-) {
-    const { handleFieldBlur, handleFieldChange, setFieldValidation } = form;
-    onValidate && setFieldValidation(field, onValidate);
+export function useField(field: Field<unknown>, onValidate?: ValidateFieldHandler): FormiteField {
+    const { handleFieldBlur, handleFieldChange } = field._handler;
+    if (onValidate && field.onValidate !== onValidate) {
+        field._setOnValidate(onValidate);
+    }
     const handleBlur = useCallback(() => handleFieldBlur(field), [field, handleFieldBlur]);
     const handleChange = useCallback((v: unknown) => handleFieldChange(field, v), [field, handleFieldChange]);
     return {
@@ -345,5 +380,3 @@ export function useField<Values extends FieldValues = FieldValues>(
         handleChange
     };
 }
-
-export type FormiteField = ReturnType<typeof useField>;

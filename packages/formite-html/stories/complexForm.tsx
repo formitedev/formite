@@ -29,10 +29,9 @@ const submitValues = async (values: SampleType) => {
 };
 
 const ComplexForm = () => {
-    const form = useForm(SampleValues, submitValues, {
+    const { canSubmit, Form, fields, formErrors, isDirty } = useForm(SampleValues, submitValues, {
         onValidate: handleValidateForm
     });
-    const { canSubmit, Form, fields, formErrors, isDirty } = form;
     return (
         <Form className="pure-form pure-form-stacked">
             <fieldset>
@@ -40,32 +39,32 @@ const ComplexForm = () => {
                 <label>Gender</label>
                 <div>
                     <label className="pure-radio">
-                        <input {...useRadioButton(form, fields.gender, Gender.Female)} />
+                        <input {...useRadioButton(fields.gender, Gender.Female)} />
                         <span> Female</span>
                     </label>
                     <label className="pure-radio">
-                        <input {...useRadioButton(form, fields.gender, Gender.Male)} />
+                        <input {...useRadioButton(fields.gender, Gender.Male)} />
                         <span> Male</span>
                     </label>
                 </div>
                 <label>First name</label>
-                <input type="text" {...useInput(form, fields.firstName, required)} />
+                <input type="text" {...useInput(fields.firstName, required)} />
                 <span className="pure-form-message">
                     {fields.firstName.visibleError ? fields.firstName.visibleError : "*"}
                 </span>
                 <label>Last name</label>
-                <input type="text" {...useInput(form, fields.lastName, required)} />
+                <input type="text" {...useInput(fields.lastName, required)} />
                 <span className="pure-form-message">
                     {fields.lastName.visibleError ? fields.lastName.visibleError : "*"}
                 </span>
                 <label>Invoice country</label>
-                <select {...useSelect(form, fields.invoiceAddress.country)}>
+                <select {...useSelect(fields.invoiceAddress.country)}>
                     <option value="Canada">Canada</option>
                     <option value="Germany">Germany</option>
                     <option value="USA">USA</option>
                 </select>
                 <label className="pure-checkbox">
-                    <input {...useCheckbox(form, fields.newsletter)} />
+                    <input {...useCheckbox(fields.newsletter)} />
                     <span> Subscribe to newsletter</span>
                 </label>
             </fieldset>
