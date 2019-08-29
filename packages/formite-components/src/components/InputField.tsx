@@ -5,7 +5,7 @@ import { FormiteInput, useInput } from "formite-html";
 
 export default function InputField(props: {
     children: (inputField: FormiteInput) => React.ReactNode;
-    field: Field<unknown>;
+    field: Field;
     onValidate?: ValidateFieldHandler;
 }) {
     const { children, field, onValidate } = props;

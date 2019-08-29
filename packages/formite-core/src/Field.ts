@@ -1,6 +1,7 @@
 import { FormFieldHandler, ValidateFieldHandler } from "./formiteTypes";
 
-export class Field<T> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class Field<T = any> {
     /**
      * @internal
      */

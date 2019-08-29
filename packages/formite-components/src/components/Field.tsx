@@ -4,7 +4,7 @@ import { Field as FieldType, FormiteField, useField, ValidateFieldHandler } from
 
 export default function Field(props: {
     children: (field: FormiteField) => React.ReactNode;
-    field: FieldType<unknown>;
+    field: FieldType;
     onValidate?: ValidateFieldHandler;
 }) {
     const { children, field, onValidate } = props;

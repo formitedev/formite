@@ -17,7 +17,7 @@ import { ValidateFieldHandler } from 'formite-core';
 // @public (undocumented)
 export function Field(props: {
     children: (field: FormiteField) => React.ReactNode;
-    field: Field_2<unknown>;
+    field: Field_2;
     onValidate?: ValidateFieldHandler;
 }): JSX.Element;
 
@@ -39,7 +39,7 @@ export type FormiteContext<Values extends FieldValues = FieldValues> = {
 // @public (undocumented)
 export function InputField(props: {
     children: (inputField: FormiteInput) => React.ReactNode;
-    field: Field_2<unknown>;
+    field: Field_2;
     onValidate?: ValidateFieldHandler;
 }): JSX.Element;
 

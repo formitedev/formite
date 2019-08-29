@@ -32,7 +32,7 @@ export type FormiteRadioButton = Readonly<ReturnType<typeof useRadioButton>>;
 export type FormiteSelect = Readonly<ReturnType<typeof useSelect>>;
 
 // @public (undocumented)
-export function useCheckbox(field: Field<unknown>, onValidate?: ValidateFieldHandler): {
+export function useCheckbox(field: Field<boolean>, onValidate?: ValidateFieldHandler, metadata?: any): {
     checked: boolean | undefined;
     onBlur: () => void;
     onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
@@ -43,14 +43,14 @@ export function useCheckbox(field: Field<unknown>, onValidate?: ValidateFieldHan
 export function useForm<Values extends FieldValues = FieldValues>(initialValues: Values, onSubmit: (values: Values) => void | Promise<void>, options?: FormOptions<Values>): FormiteHtmlForm<Values>;
 
 // @public (undocumented)
-export function useInput(field: Field<unknown>, onValidate?: ValidateFieldHandler): {
+export function useInput(field: Field, onValidate?: ValidateFieldHandler, metadata?: any): {
     value: string | undefined;
     onBlur: () => void;
     onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 // @public (undocumented)
-export function useRadioButton(field: Field<unknown>, value: string | number, onValidate?: ValidateFieldHandler): {
+export function useRadioButton(field: Field, value: string | number, onValidate?: ValidateFieldHandler, metadata?: any): {
     type: string;
     checked: boolean;
     value: string | number;
@@ -59,7 +59,7 @@ export function useRadioButton(field: Field<unknown>, value: string | number, on
 };
 
 // @public (undocumented)
-export function useSelect(field: Field<unknown>, onValidate?: ValidateFieldHandler): {
+export function useSelect(field: Field, onValidate?: ValidateFieldHandler, metadata?: any): {
     value: string | string[] | undefined;
     onBlur: () => void;
     onChange: (ev: React.ChangeEvent<HTMLSelectElement>) => void;

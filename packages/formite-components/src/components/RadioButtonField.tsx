@@ -5,7 +5,7 @@ import { FormiteRadioButton, useRadioButton } from "formite-html";
 
 export default function RadioButtonField(props: {
     children: (radioButtonField: FormiteRadioButton) => React.ReactNode;
-    field: Field<unknown>;
+    field: Field;
     value: string | number;
     onValidate?: ValidateFieldHandler;
 }) {

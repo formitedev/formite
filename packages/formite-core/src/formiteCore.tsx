@@ -44,7 +44,7 @@ export function createFields<VALUES extends FieldValues>(object: VALUES): Fields
     const result: any = {};
     for (const key of Object.keys(object)) {
         const value = object[key];
-        let field: Field<unknown> | Fields<unknown>[] | object;
+        let field: Field | Fields[] | object;
         if (Array.isArray(value)) {
             field = value.map(v => createFields(v));
         } else if (isValuesObject(value)) {
@@ -98,7 +98,7 @@ async function validateFields<VALUES extends FieldValues = FieldValues>(fields: 
         if (field instanceof Field) {
             if (field.onValidate) {
                 field._setError(undefined);
-                let validateResult = field.onValidate(field.value);
+                let validateResult = field.onValidate(field.value, field);
                 if (isPromise(validateResult)) {
                     validateResult = await validateResult;
                 }
@@ -124,7 +124,7 @@ async function validateFields<VALUES extends FieldValues = FieldValues>(fields: 
 
 function anyFieldWith<VALUES extends FieldValues = FieldValues>(
     fields: Fields<VALUES>,
-    predicate: (field: Field<unknown>) => boolean
+    predicate: (field: Field) => boolean
 ): boolean {
     for (const key of Object.keys(fields)) {
         const field = fields[key];
@@ -200,10 +200,10 @@ export function useForm<Values extends FieldValues = FieldValues>(
         return formErrors;
     }, [fields, onValidate, setFieldError]);
     const validateField = useCallback(
-        async (field: Field<unknown>) => {
+        async (field: Field) => {
             if (field.onValidate) {
                 field._setError(undefined);
-                let validateResult = field.onValidate(field.value);
+                let validateResult = field.onValidate(field.value, field);
                 if (isPromise(validateResult)) {
                     field._startValidating();
                     fieldsUpdated();
@@ -217,7 +217,7 @@ export function useForm<Values extends FieldValues = FieldValues>(
         [fieldsUpdated]
     );
     const validateFieldChange = useCallback(
-        async (field: Field<unknown>) => {
+        async (field: Field) => {
             setValidatingCounter(n => n + 1);
             let isValid = false;
             try {
@@ -272,7 +272,8 @@ export function useForm<Values extends FieldValues = FieldValues>(
         [fieldsUpdated]
     );
     const setFieldValue = useCallback(
-        (field: Field<unknown>, v: unknown, validate = true) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (field: Field, v: any, validate = true) => {
             if (v !== field.value) {
                 field._setValue(v);
                 fieldsUpdated();
@@ -323,7 +324,8 @@ export function useForm<Values extends FieldValues = FieldValues>(
         [setFieldTouched, validateFieldChange, validateOnBlur]
     );
     const handleFieldChange = useCallback(
-        (field: Field<unknown>, v: unknown) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (field: Field, v: any) => {
             setFieldValue(field, v, validateOnChange);
         },
         [setFieldValue, validateOnChange]
@@ -369,7 +371,7 @@ export function useForm<Values extends FieldValues = FieldValues>(
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useField(field: Field<unknown>, onValidate?: ValidateFieldHandler, metadata?: any): FormiteField {
+export function useField(field: Field, onValidate?: ValidateFieldHandler, metadata?: any): FormiteField {
     if (onValidate && field.onValidate !== onValidate) {
         field._setOnValidate(onValidate);
     }
@@ -378,7 +380,8 @@ export function useField(field: Field<unknown>, onValidate?: ValidateFieldHandle
     }
     const { handleFieldBlur, handleFieldChange } = field._handler;
     const handleBlur = useCallback(() => handleFieldBlur(field), [field, handleFieldBlur]);
-    const handleChange = useCallback((v: unknown) => handleFieldChange(field, v), [field, handleFieldChange]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const handleChange = useCallback((v: any) => handleFieldChange(field, v), [field, handleFieldChange]);
     return {
         handleBlur,
         handleChange

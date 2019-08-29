@@ -5,7 +5,7 @@ import { FormiteCheckbox, useCheckbox } from "formite-html";
 
 export default function CheckboxField(props: {
     children: (checkboxField: FormiteCheckbox) => React.ReactNode;
-    field: Field<unknown>;
+    field: Field<boolean>;
     onValidate?: ValidateFieldHandler;
 }) {
     const { children, field, onValidate } = props;

@@ -47,11 +47,17 @@ interface ElementWithChecked extends Element {
 }
 
 interface ElementWithValue extends Element {
-    value: unknown;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any;
 }
 
-function useCheckedController<E extends ElementWithChecked>(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
-    const formField = useField(field, onValidate);
+function useCheckedController<E extends ElementWithChecked>(
+    field: Field<boolean>,
+    onValidate?: ValidateFieldHandler,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    metadata?: any
+) {
+    const formField = useField(field, onValidate, metadata);
     const onChange = useCallback((ev: React.ChangeEvent<E>) => formField.handleChange(ev.target.checked), [formField]);
     return {
         checked: field.value as boolean | undefined,
@@ -60,8 +66,13 @@ function useCheckedController<E extends ElementWithChecked>(field: Field<unknown
     };
 }
 
-function useValueController<E extends ElementWithValue, T>(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
-    const formField = useField(field, onValidate);
+function useValueController<E extends ElementWithValue, T>(
+    field: Field,
+    onValidate?: ValidateFieldHandler,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    metadata?: any
+) {
+    const formField = useField(field, onValidate, metadata);
     const onChange = useCallback((ev: React.ChangeEvent<E>) => formField.handleChange(ev.target.value), [formField]);
     return {
         value: field.value as T,
@@ -70,26 +81,35 @@ function useValueController<E extends ElementWithValue, T>(field: Field<unknown>
     };
 }
 
-export function useCheckbox(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
-    return { type: "checkbox", ...useCheckedController<HTMLInputElement>(field, onValidate) };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useCheckbox(field: Field<boolean>, onValidate?: ValidateFieldHandler, metadata?: any) {
+    return { type: "checkbox", ...useCheckedController<HTMLInputElement>(field, onValidate, metadata) };
 }
 
 export type FormiteCheckbox = Readonly<ReturnType<typeof useCheckbox>>;
 
-export function useInput(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
-    return useValueController<HTMLInputElement, string | undefined>(field, onValidate);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useInput(field: Field, onValidate?: ValidateFieldHandler, metadata?: any) {
+    return useValueController<HTMLInputElement, string | undefined>(field, onValidate, metadata);
 }
 
 export type FormiteInput = Readonly<ReturnType<typeof useInput>>;
 
-export function useSelect(field: Field<unknown>, onValidate?: ValidateFieldHandler) {
-    return useValueController<HTMLSelectElement, string | string[] | undefined>(field, onValidate);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function useSelect(field: Field, onValidate?: ValidateFieldHandler, metadata?: any) {
+    return useValueController<HTMLSelectElement, string | string[] | undefined>(field, onValidate, metadata);
 }
 
 export type FormiteSelect = Readonly<ReturnType<typeof useSelect>>;
 
-export function useRadioButton(field: Field<unknown>, value: string | number, onValidate?: ValidateFieldHandler) {
-    const formField = useField(field, onValidate);
+export function useRadioButton(
+    field: Field,
+    value: string | number,
+    onValidate?: ValidateFieldHandler,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    metadata?: any
+) {
+    const formField = useField(field, onValidate, metadata);
     const onChange = useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
             ev.target.checked && formField.handleChange(value);
