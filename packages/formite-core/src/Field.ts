@@ -1,5 +1,8 @@
 import { FormFieldHandler, ValidateFieldHandler } from "./formiteTypes";
 
+/**
+ * A form's field with its current state.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class Field<T = any> {
     /**
@@ -20,11 +23,6 @@ export class Field<T = any> {
     /**
      * @internal
      */
-    private _onValidate?: ValidateFieldHandler;
-
-    /**
-     * @internal
-     */
     private _touched: boolean;
 
     /**
@@ -37,31 +35,64 @@ export class Field<T = any> {
      */
     public _handler!: FormFieldHandler;
 
+    /**
+     * @internal
+     */
+    public _onValidate?: ValidateFieldHandler;
+
+    /**
+     * Custom data value. For example, to be used within the validation function.
+     */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public metadata: any;
 
-    // Readonly properties
+    /**
+     * An error message if the field is not valid.
+     */
     public get error() {
         return this._error;
     }
+
+    /**
+     * The initial value that was provided to the Form Hook.
+     */
     public get initialValue() {
         return this._initialValue;
     }
+
+    /**
+     * `true` while the field is validating.
+     */
     public get isValidating() {
         return this._validatingCounter > 0;
     }
-    public get onValidate() {
-        return this._onValidate;
-    }
+
+    /**
+     * `true` after a field's input component lost focus.
+     */
     public get touched() {
         return this._touched;
     }
+
+    /**
+     * The current value of the field
+     */
     public get value() {
         return this._value;
     }
+
+    /**
+     * The error message if the field is not valid and after the field has been touched.
+     */
     public get visibleError() {
         return this._touched ? this._error : "";
     }
+
+    /**
+     * @internal
+     * @param name - The property name of the field
+     * @param value - The initial value of the field
+     */
     public constructor(public readonly name: string, value: T) {
         this._initialValue = value;
         this._validatingCounter = 0;

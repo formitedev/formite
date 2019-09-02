@@ -61,6 +61,14 @@ const AsyncForm = () => {
     );
     const firstNameField = useField(fields.firstName, asyncRequired);
     const lastNameField = useField(fields.lastName, asyncRequired);
+    const handleFirstNameChange = useCallback(
+        (ev: React.ChangeEvent<HTMLInputElement>) => firstNameField.onChange(ev.currentTarget.value),
+        [firstNameField]
+    );
+    const handleLastNameChange = useCallback(
+        (ev: React.ChangeEvent<HTMLInputElement>) => lastNameField.onChange(ev.currentTarget.value),
+        [lastNameField]
+    );
     if (isLoading) {
         return <p>Loading...</p>;
     }
@@ -69,9 +77,9 @@ const AsyncForm = () => {
             <p>
                 <input
                     type="text"
-                    value={fields.firstName.value}
-                    onBlur={firstNameField.handleBlur}
-                    onChange={ev => firstNameField.handleChange(ev.currentTarget.value)}
+                    value={firstNameField.value}
+                    onBlur={firstNameField.onBlur}
+                    onChange={handleFirstNameChange}
                 />
                 <span>{fields.firstName.isValidating ? "Is validating" : ""}</span>
                 <span>{fields.firstName.error}</span>
@@ -79,9 +87,9 @@ const AsyncForm = () => {
             <p>
                 <input
                     type="text"
-                    value={fields.lastName.value}
-                    onBlur={lastNameField.handleBlur}
-                    onChange={ev => lastNameField.handleChange(ev.currentTarget.value)}
+                    value={lastNameField.value}
+                    onBlur={lastNameField.onBlur}
+                    onChange={handleLastNameChange}
                 />
                 <span>{fields.lastName.isValidating ? "Is validating" : ""}</span>
                 <span>{fields.lastName.error}</span>

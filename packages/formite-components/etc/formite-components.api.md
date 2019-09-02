@@ -6,45 +6,76 @@
 
 import { Field as Field_2 } from 'formite-core';
 import { Fields } from 'formite-core';
-import { FieldValues } from 'formite-core';
+import { FormiteCheckbox } from 'formite-html';
 import { FormiteField } from 'formite-core';
 import { FormiteForm } from 'formite-core';
 import { FormiteInput } from 'formite-html';
+import { FormiteRadioButton } from 'formite-html';
+import { FormiteSelect } from 'formite-html';
 import { FormOptions } from 'formite-core';
+import { FormValues } from 'formite-core';
 import React from 'react';
 import { ValidateFieldHandler } from 'formite-core';
 
-// @public (undocumented)
+// @public
+export function CheckboxField(props: {
+    children: (checkboxField: FormiteCheckbox) => React.ReactNode;
+    field: Field_2<boolean>;
+    onValidate?: ValidateFieldHandler;
+}): JSX.Element;
+
+// @public
 export function Field(props: {
     children: (field: FormiteField) => React.ReactNode;
     field: Field_2;
     onValidate?: ValidateFieldHandler;
 }): JSX.Element;
 
-// @public (undocumented)
-export function Form<Values extends FieldValues = FieldValues>(props: React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> & {
+// @public
+export function Form<Values extends FormValues>(props: React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> & {
     children: (form: FormiteForm<Values>, fields: Fields<Values>) => React.ReactNode;
     initialValues: Values;
     onSubmitForm: (values: Values) => void | Promise<void>;
 } & FormOptions<Values>): JSX.Element;
 
+// Warning: (ae-incompatible-release-tags) The symbol "FormContext" is marked as @public, but its signature references "FormiteContext" which is marked as @internal
+// 
 // @public (undocumented)
-export const FormContext: React.Context<FormiteContext<FieldValues>>;
+export const FormContext: React.Context<FormiteContext<FormValues>>;
 
-// @public (undocumented)
-export type FormiteContext<Values extends FieldValues = FieldValues> = {
+// Warning: (ae-internal-missing-underscore) The name "FormiteContext" should be prefixed with an underscore because the declaration is marked as @internal
+// 
+// @internal (undocumented)
+export type FormiteContext<Values extends FormValues = FormValues> = {
     form: FormiteForm<Values>;
 };
 
-// @public (undocumented)
+// @public
 export function InputField(props: {
     children: (inputField: FormiteInput) => React.ReactNode;
     field: Field_2;
     onValidate?: ValidateFieldHandler;
 }): JSX.Element;
 
-// @public (undocumented)
-export function useFormite<Values extends FieldValues = FieldValues>(): FormiteContext<Values>;
+// @public
+export function RadioButtonField(props: {
+    children: (radioButtonField: FormiteRadioButton) => React.ReactNode;
+    field: Field_2;
+    value: string | number;
+    onValidate?: ValidateFieldHandler;
+}): JSX.Element;
+
+// @public
+export function SelectField(props: {
+    children: (selectField: FormiteSelect) => React.ReactNode;
+    field: Field_2;
+    onValidate?: ValidateFieldHandler;
+}): JSX.Element;
+
+// Warning: (ae-internal-missing-underscore) The name "useFormite" should be prefixed with an underscore because the declaration is marked as @internal
+// 
+// @internal (undocumented)
+export function useFormite<Values extends FormValues = FormValues>(): FormiteContext<Values>;
 
 
 // (No @packageDocumentation comment for this package)

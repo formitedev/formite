@@ -39,11 +39,11 @@ const SampleForm = () => {
     const firstNameField = useField(fields.firstName, required);
     const lastNameField = useField(fields.lastName, required);
     const handleFirstNameChange = useCallback(
-        (ev: React.ChangeEvent<HTMLInputElement>) => firstNameField.handleChange(ev.currentTarget.value),
+        (ev: React.ChangeEvent<HTMLInputElement>) => firstNameField.onChange(ev.currentTarget.value),
         [firstNameField]
     );
     const handleLastNameChange = useCallback(
-        (ev: React.ChangeEvent<HTMLInputElement>) => lastNameField.handleChange(ev.currentTarget.value),
+        (ev: React.ChangeEvent<HTMLInputElement>) => lastNameField.onChange(ev.currentTarget.value),
         [lastNameField]
     );
     return (

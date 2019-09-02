@@ -5,27 +5,27 @@
 ```ts
 
 // @public
-export function createFields<VALUES extends FieldValues>(object: VALUES): Fields<VALUES>;
+export function clearFieldErrors<VALUES extends FormValues>(fields: Fields<VALUES>): void;
 
-// @public (undocumented)
+// @public
+export function createFields<VALUES extends FormValues>(object: VALUES): Fields<VALUES>;
+
+// @public
 export class Field<T = any> {
+    // @internal
     constructor(name: string, value: T);
     // @internal (undocumented)
     _endValidating(): void;
-    // (undocumented)
     readonly error: string | undefined;
     // @internal (undocumented)
     _handler: FormFieldHandler;
-    // (undocumented)
     readonly initialValue: T;
-    // (undocumented)
     readonly isValidating: boolean;
-    // (undocumented)
     metadata: any;
     // (undocumented)
     readonly name: string;
-    // (undocumented)
-    readonly onValidate: ValidateFieldHandler | undefined;
+    // @internal (undocumented)
+    _onValidate?: ValidateFieldHandler;
     // @internal (undocumented)
     _setError(error: string | undefined): void;
     // @internal (undocumented)
@@ -36,24 +36,15 @@ export class Field<T = any> {
     _setValue(value: T): void;
     // @internal (undocumented)
     _startValidating(): void;
-    // (undocumented)
     readonly touched: boolean;
-    // (undocumented)
     readonly value: T;
-    // (undocumented)
     readonly visibleError: string | undefined;
 }
 
-// @public (undocumented)
-export type Fields<VALUES = FieldValues> = {
+// @public
+export type Fields<VALUES = FormValues> = {
     [K in keyof VALUES]: VALUES[K] extends any[] ? VALUES[K][number] extends object ? Fields<VALUES[K][number]>[] : Field<VALUES[K]> : VALUES[K] extends object ? Fields<VALUES[K]> : Field<VALUES[K]>;
 };
-
-// @public (undocumented)
-export interface FieldValues {
-    // (undocumented)
-    [field: string]: any;
-}
 
 // Warning: (ae-internal-missing-underscore) The name "FormFieldHandler" should be prefixed with an underscore because the declaration is marked as @internal
 // 
@@ -63,66 +54,54 @@ export type FormFieldHandler = {
     handleFieldChange: (field: Field, v: any) => void;
 };
 
-// @public (undocumented)
+// @public
 export interface FormiteField {
-    // (undocumented)
-    handleBlur: () => void;
-    // (undocumented)
-    handleChange: (v: any) => void;
+    onBlur: () => void;
+    onChange: (value: any) => void;
+    readonly value: any;
 }
 
-// @public (undocumented)
-export interface FormiteForm<Values extends FieldValues = FieldValues> {
-    // (undocumented)
+// @public
+export interface FormiteForm<Values extends FormValues = FormValues> {
     readonly canSubmit: boolean;
-    // (undocumented)
     readonly fields: Fields<Values>;
-    // (undocumented)
     readonly formErrors: string[];
-    // (undocumented)
-    readonly handleFieldBlur: (field: Field) => void;
-    // (undocumented)
-    readonly handleFieldChange: (field: Field, v: any) => void;
-    // (undocumented)
     readonly isDirty: boolean;
-    // (undocumented)
     readonly isSubmitting: boolean;
-    // (undocumented)
     readonly isValid: boolean;
-    // (undocumented)
     readonly isValidating: boolean;
-    // (undocumented)
     reset: () => void;
-    // (undocumented)
     setFieldTouched: (field: Field, touched: boolean) => void;
-    // (undocumented)
     setFieldValue: (field: Field, v: any, validate?: boolean) => Promise<boolean>;
-    // (undocumented)
     submit: () => Promise<boolean>;
-    // (undocumented)
     updateFields: (updateAction: (newFields: Fields<Values>) => void) => void;
-    // (undocumented)
     validate: () => Promise<boolean>;
 }
 
-// @public (undocumented)
-export type FormOptions<Values extends FieldValues> = {
+// @public
+export type FormOptions<Values extends FormValues> = {
     validateInitialValues?: boolean;
     validateOnBlur?: boolean;
     validateOnChange?: boolean;
     onValidate?: ValidateFormHandler<Values>;
 };
 
-// @public (undocumented)
+// @public
+export interface FormValues {
+    // (undocumented)
+    [field: string]: any;
+}
+
+// @public
 export function useField(field: Field, onValidate?: ValidateFieldHandler, metadata?: any): FormiteField;
 
-// @public (undocumented)
-export function useForm<Values extends FieldValues = FieldValues>(initialValues: Values, onSubmit: (values: Values) => void | Promise<void>, options?: FormOptions<Values>): FormiteForm<Values>;
+// @public
+export function useForm<Values extends FormValues>(initialValues: Values, onSubmit: (values: Values) => void | Promise<void>, options?: FormOptions<Values>): FormiteForm<Values>;
 
-// @public (undocumented)
+// @public
 export type ValidateFieldHandler = (value: any, field: Field) => string | undefined | Promise<string | undefined>;
 
-// @public (undocumented)
+// @public
 export type ValidateFormHandler<VALUES> = (values: VALUES, fields: Fields<VALUES>, setFieldError: (field: Field, error?: string) => void) => string[] | Promise<string[]>;
 
 

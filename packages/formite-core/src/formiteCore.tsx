@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import {
     FormFieldHandler,
     Fields,
-    FieldValues,
+    FormValues,
     FormiteForm,
     FormOptions,
     ValidateFieldHandler,
@@ -11,15 +11,15 @@ import {
 } from "./formiteTypes";
 import { Field } from "./Field";
 
-function isValuesObject<VALUES extends FieldValues = FieldValues>(obj: unknown): obj is VALUES {
+function isValuesObject<VALUES extends FormValues = FormValues>(obj: unknown): obj is VALUES {
     return obj !== null && typeof obj === "object";
 }
 
-function isObjectWithFields<VALUES extends FieldValues = FieldValues>(obj: unknown): obj is Fields<VALUES> {
+function isObjectWithFields<VALUES extends FormValues = FormValues>(obj: unknown): obj is Fields<VALUES> {
     return obj !== null && typeof obj === "object";
 }
 
-function isArrayWithFields<VALUES extends FieldValues = FieldValues>(obj: unknown): obj is Fields<VALUES>[] {
+function isArrayWithFields<VALUES extends FormValues = FormValues>(obj: unknown): obj is Fields<VALUES>[] {
     return obj !== null && Array.isArray(obj);
 }
 
@@ -28,51 +28,26 @@ function isPromise<T>(p: any): p is Promise<T> {
     return p !== null && typeof p === "object" && typeof p.then === "function";
 }
 
-/**
- * Creates Field instances for all properties of the given object.
- *
- * @remarks
- * Makes a deep copy of all values and arrays and creates new Field instances. This function
- * is only used when using dynamic forms.
- *
- * @param object - An object whose properties will be converted to Field instances.
- * @returns An object with Fields and arrays of Fields with the same structure as the input object.
- *
- */
-export function createFields<VALUES extends FieldValues>(object: VALUES): Fields<VALUES> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const result: any = {};
-    for (const key of Object.keys(object)) {
-        const value = object[key];
-        let field: Field | Fields[] | object;
-        if (Array.isArray(value)) {
-            field = value.map(v => createFields(v));
-        } else if (isValuesObject(value)) {
-            field = createFields(value);
-        } else {
-            field = new Field(key, value);
-        }
-        result[key] = field;
-    }
-    return result;
-}
-
-function setHandler<VALUES extends FieldValues = FieldValues>(fields: Fields<VALUES>, handler: FormFieldHandler) {
+function forEachField<VALUES extends FormValues = FormValues>(fields: Fields<VALUES>, action: (field: Field) => void) {
     for (const key of Object.keys(fields)) {
         const field = fields[key];
         if (field instanceof Field) {
-            field._handler = handler;
+            action(field);
         } else if (isArrayWithFields(field)) {
             for (const f of field) {
-                setHandler(f, handler);
+                forEachField(f, action);
             }
         } else if (isObjectWithFields(field)) {
-            setHandler(field, handler);
+            forEachField(field, action);
         }
     }
 }
 
-function getValues<VALUES extends FieldValues = FieldValues>(fields: Fields<VALUES>): VALUES {
+function setHandler<VALUES extends FormValues = FormValues>(fields: Fields<VALUES>, handler: FormFieldHandler) {
+    forEachField(fields, field => (field._handler = handler));
+}
+
+function getValues<VALUES extends FormValues = FormValues>(fields: Fields<VALUES>): VALUES {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = {};
     for (const key of Object.keys(fields)) {
@@ -91,14 +66,14 @@ function getValues<VALUES extends FieldValues = FieldValues>(fields: Fields<VALU
     return result;
 }
 
-async function validateFields<VALUES extends FieldValues = FieldValues>(fields: Fields<VALUES>) {
+async function validateFields<VALUES extends FormValues = FormValues>(fields: Fields<VALUES>) {
     let result = true;
     for (const key of Object.keys(fields)) {
         const field = fields[key];
         if (field instanceof Field) {
-            if (field.onValidate) {
+            if (field._onValidate) {
                 field._setError(undefined);
-                let validateResult = field.onValidate(field.value, field);
+                let validateResult = field._onValidate(field.value, field);
                 if (isPromise(validateResult)) {
                     validateResult = await validateResult;
                 }
@@ -122,7 +97,7 @@ async function validateFields<VALUES extends FieldValues = FieldValues>(fields: 
     return result;
 }
 
-function anyFieldWith<VALUES extends FieldValues = FieldValues>(
+function anyFieldWith<VALUES extends FormValues = FormValues>(
     fields: Fields<VALUES>,
     predicate: (field: Field) => boolean
 ): boolean {
@@ -147,15 +122,70 @@ function anyFieldWith<VALUES extends FieldValues = FieldValues>(
     return false;
 }
 
-function fieldsAreValid<VALUES extends FieldValues = FieldValues>(fields: Fields<VALUES>) {
+function fieldsAreValid<VALUES extends FormValues = FormValues>(fields: Fields<VALUES>) {
     return !anyFieldWith(fields, field => !!field.error);
 }
 
-function fieldsAreDirty<VALUES extends FieldValues = FieldValues>(fields: Fields<VALUES>) {
+function fieldsAreDirty<VALUES extends FormValues = FormValues>(fields: Fields<VALUES>) {
     return anyFieldWith(fields, field => field.value !== field.initialValue);
 }
 
-export function useForm<Values extends FieldValues = FieldValues>(
+/**
+ * Clears the errors of the fields by doing a deep traversal.
+ *
+ * @remarks
+ * For example, it can be used during form validation to clear all errors before setting field errors.
+ *
+ * @param fields - A {@link Field}, an object with {@link Fields | fields} or an array of {@link Fields | fields}
+ */
+export function clearFieldErrors<VALUES extends FormValues>(fields: Fields<VALUES>) {
+    forEachField(fields, field => field._setError(undefined));
+}
+
+/**
+ * Creates Field instances for all properties of the given object.
+ *
+ * @remarks
+ * Makes a deep copy of all values and arrays and creates new {@link Field} instances. This function
+ * is only used when using dynamic forms.
+ *
+ * @param object - An object whose properties will be converted to {@link Field} instances.
+ *
+ * @returns An object with {@link Field | fields} and arrays of {@link Field | fields} with the same structure as
+ * the input object
+ *
+ */
+export function createFields<VALUES extends FormValues>(object: VALUES): Fields<VALUES> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: any = {};
+    for (const key of Object.keys(object)) {
+        const value = object[key];
+        let field: Field | Fields[] | object;
+        if (Array.isArray(value)) {
+            field = value.map(v => createFields(v));
+        } else if (isValuesObject(value)) {
+            field = createFields(value);
+        } else {
+            field = new Field(key, value);
+        }
+        result[key] = field;
+    }
+    return result;
+}
+
+/**
+ * Sets up the form hook.
+ *
+ * @remarks
+ * All initial field values should be set even if they are undefined.
+ *
+ * @param initialValues - Initial values of the form
+ * @param onSubmit - The function that is called when submitting the form.
+ * @param options - Optional {@link FormOptions | Form options}
+ *
+ * @returns The {@link FormiteForm | forms state and API}
+ */
+export function useForm<Values extends FormValues>(
     initialValues: Values,
     onSubmit: (values: Values) => void | Promise<void>,
     options: FormOptions<Values> = {}
@@ -201,9 +231,9 @@ export function useForm<Values extends FieldValues = FieldValues>(
     }, [fields, onValidate, setFieldError]);
     const validateField = useCallback(
         async (field: Field) => {
-            if (field.onValidate) {
+            if (field._onValidate) {
                 field._setError(undefined);
-                let validateResult = field.onValidate(field.value, field);
+                let validateResult = field._onValidate(field.value, field);
                 if (isPromise(validateResult)) {
                     field._startValidating();
                     fieldsUpdated();
@@ -348,8 +378,6 @@ export function useForm<Values extends FieldValues = FieldValues>(
     return {
         fields,
         formErrors,
-        handleFieldBlur,
-        handleFieldChange,
         isSubmitting,
         isValid,
         reset,
@@ -369,21 +397,30 @@ export function useForm<Values extends FieldValues = FieldValues>(
         }
     };
 }
-
+/**
+ * Sets up a form's field hook.
+ *
+ * @param field - The field to connect to an input component.
+ * @param onValidate - An optional callback function {@link ValidateFieldHandler | to validate the field}.
+ * @param metadata - An optional data value that is stored with the {@link Field}.
+ *
+ * @returns The fields {@link FormiteField | state and API}.
+ */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useField(field: Field, onValidate?: ValidateFieldHandler, metadata?: any): FormiteField {
-    if (onValidate && field.onValidate !== onValidate) {
+    if (onValidate && field._onValidate !== onValidate) {
         field._setOnValidate(onValidate);
     }
     if (metadata && field.metadata !== metadata) {
         field.metadata = metadata;
     }
     const { handleFieldBlur, handleFieldChange } = field._handler;
-    const handleBlur = useCallback(() => handleFieldBlur(field), [field, handleFieldBlur]);
+    const onBlur = useCallback(() => handleFieldBlur(field), [field, handleFieldBlur]);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleChange = useCallback((v: any) => handleFieldChange(field, v), [field, handleFieldChange]);
+    const onChange = useCallback((v: any) => handleFieldChange(field, v), [field, handleFieldChange]);
     return {
-        handleBlur,
-        handleChange
+        value: field.value,
+        onBlur,
+        onChange
     };
 }

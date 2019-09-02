@@ -1,14 +1,20 @@
 import React, { useContext } from "react";
 
-import { FieldValues, FormiteForm } from "formite-core";
+import { FormiteForm, FormValues } from "formite-core";
 
-export type FormiteContext<Values extends FieldValues = FieldValues> = {
+/**
+ * @internal
+ */
+export type FormiteContext<Values extends FormValues = FormValues> = {
     form: FormiteForm<Values>;
 };
 
-const FormContext = React.createContext<FormiteContext<FieldValues>>({ form: {} as FormiteForm<FieldValues> });
+const FormContext = React.createContext<FormiteContext<FormValues>>({ form: {} as FormiteForm<FormValues> });
 
-export function useFormite<Values extends FieldValues = FieldValues>() {
+/**
+ * @internal
+ */
+export function useFormite<Values extends FormValues = FormValues>() {
     return useContext(FormContext) as FormiteContext<Values>;
 }
 

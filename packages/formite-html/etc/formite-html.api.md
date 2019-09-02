@@ -5,9 +5,9 @@
 ```ts
 
 import { Field } from 'formite-core';
-import { FieldValues } from 'formite-core';
 import { FormiteForm } from 'formite-core';
 import { FormOptions } from 'formite-core';
+import { FormValues } from 'formite-core';
 import React from 'react';
 import { ValidateFieldHandler } from 'formite-core';
 
@@ -15,7 +15,7 @@ import { ValidateFieldHandler } from 'formite-core';
 export type FormiteCheckbox = Readonly<ReturnType<typeof useCheckbox>>;
 
 // @public (undocumented)
-export interface FormiteHtmlForm<Values extends FieldValues = FieldValues> extends FormiteForm<Values> {
+export interface FormiteHtmlForm<Values extends FormValues> extends FormiteForm<Values> {
     // (undocumented)
     Form: (props: React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement>) => JSX.Element;
     // (undocumented)
@@ -31,7 +31,7 @@ export type FormiteRadioButton = Readonly<ReturnType<typeof useRadioButton>>;
 // @public (undocumented)
 export type FormiteSelect = Readonly<ReturnType<typeof useSelect>>;
 
-// @public (undocumented)
+// @public
 export function useCheckbox(field: Field<boolean>, onValidate?: ValidateFieldHandler, metadata?: any): {
     checked: boolean | undefined;
     onBlur: () => void;
@@ -39,17 +39,17 @@ export function useCheckbox(field: Field<boolean>, onValidate?: ValidateFieldHan
     type: string;
 };
 
-// @public (undocumented)
-export function useForm<Values extends FieldValues = FieldValues>(initialValues: Values, onSubmit: (values: Values) => void | Promise<void>, options?: FormOptions<Values>): FormiteHtmlForm<Values>;
+// @public
+export function useForm<Values extends FormValues>(initialValues: Values, onSubmit: (values: Values) => void | Promise<void>, options?: FormOptions<Values>): FormiteHtmlForm<Values>;
 
-// @public (undocumented)
+// @public
 export function useInput(field: Field, onValidate?: ValidateFieldHandler, metadata?: any): {
     value: string | undefined;
     onBlur: () => void;
     onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-// @public (undocumented)
+// @public
 export function useRadioButton(field: Field, value: string | number, onValidate?: ValidateFieldHandler, metadata?: any): {
     type: string;
     checked: boolean;
@@ -58,7 +58,7 @@ export function useRadioButton(field: Field, value: string | number, onValidate?
     onChange: (ev: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-// @public (undocumented)
+// @public
 export function useSelect(field: Field, onValidate?: ValidateFieldHandler, metadata?: any): {
     value: string | string[] | undefined;
     onBlur: () => void;

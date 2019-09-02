@@ -48,7 +48,7 @@ describe("Formite Field", () => {
             return { form, firstNameField };
         });
         act(() => {
-            result.current.firstNameField.handleChange("Jack");
+            result.current.firstNameField.onChange("Jack");
         });
         await waitForNextUpdate();
         expect(result.current.form.fields.firstName.value).toBe("Jack");
@@ -66,7 +66,7 @@ describe("Formite Field", () => {
             return { form, firstNameField };
         });
         act(() => {
-            result.current.firstNameField.handleChange("Jack");
+            result.current.firstNameField.onChange("Jack");
         });
         await waitForNextUpdate();
         expect(result.current.form.fields.firstName.value).toBe("Jack");
@@ -87,9 +87,9 @@ describe("Formite Field", () => {
         });
         await actAsync(async () => {
             // This causes a validation error
-            await result.current.firstNameField.handleChange("Jack");
+            await result.current.firstNameField.onChange("Jack");
             // This does not cause a validation error but the form should still be invalid
-            await result.current.lastNameField.handleChange("Williams");
+            await result.current.lastNameField.onChange("Williams");
         });
         const { fields } = result.current.form;
         expect(fields.firstName.value).toBe("Jack");
@@ -107,7 +107,7 @@ describe("Formite Field", () => {
         });
         expect(result.current.form.fields.firstName.touched).toBe(false);
         act(() => {
-            result.current.firstNameField.handleBlur();
+            result.current.firstNameField.onBlur();
         });
         expect(result.current.form.fields.firstName.touched).toBe(true);
     });
