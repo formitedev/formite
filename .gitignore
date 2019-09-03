@@ -1,3 +1,5 @@
+.docusaurus
+.cache-loader
 logs
 *.log
 node_modules/
@@ -6,4 +8,5 @@ dist
 temp
 packages/*/lib
 packages/*/docs
+!packages/formite-website/docs
 coverage

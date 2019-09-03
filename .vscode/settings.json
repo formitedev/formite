@@ -16,9 +16,12 @@
         "*.json": "jsonc"
     },
     "files.exclude": {
+        "**/.docusaurus": true,
         "**/build": true,
         "**/dist": true,
-        "**/docs": true,
+        "**/formite-components/docs": true,
+        "**/formite-core/docs": true,
+        "**/formite-html/docs": true,
         "**/lib": true,
         "**/temp": true
     }

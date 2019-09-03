@@ -1,0 +1,39 @@
+{
+  "name": "formite-website",
+  "version": "1.0.0",
+  "private": true,
+  "author": "joerneu <31096117+joerneu@users.noreply.github.com>",
+  "homepage": "https://www.formite.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/formitedev/formite"
+  },
+  "bugs": {
+    "url": "https://github.com/formitedev/formite"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start-website": "docusaurus start",
+    "build-website": "docusaurus build"
+  },
+  "dependencies": {
+    "@docusaurus/core": "^2.0.0-alpha.24",
+    "@docusaurus/preset-classic": "^2.0.0-alpha.24",
+    "classnames": "^2.2.6",
+    "prop-types": "^15.3.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
