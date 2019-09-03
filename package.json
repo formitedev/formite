@@ -8,7 +8,8 @@
     "build": "lerna run build",
     "build-website": "lerna run build-website",
     "generate-docs": "lerna run generate-api-docs",
-    "publish": "lerna run build && lerna publish",
+    "publish": "lerna run build && lerna publish from-git",
+    "set-version": "lerna run build && lerna version",
     "start-website": "lerna run start-website",
     "storybook": "start-storybook -p 5001",
     "test": "lerna run pretest && jest"
