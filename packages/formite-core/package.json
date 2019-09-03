@@ -35,7 +35,7 @@
     "watch-lib": "tsc -p ./tsconfig.build.json -w"
   },
   "devDependencies": {
-    "formite-sample": "^0.2.0",
+    "formite-sample": "^1.0.0",
     "react": ">=16.8.0"
   },
   "peerDependencies": {

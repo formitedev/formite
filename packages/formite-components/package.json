@@ -37,7 +37,7 @@
   "devDependencies": {
     "formite-core": "^0.2.3",
     "formite-html": "^0.2.3",
-    "formite-sample": "^0.2.0",
+    "formite-sample": "^1.0.0",
     "react": ">=16.8.0"
   },
   "peerDependencies": {
