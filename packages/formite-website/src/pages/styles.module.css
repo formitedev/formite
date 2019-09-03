@@ -28,11 +28,31 @@
   border-style: solid;
 }
 
+.sectionFeatures {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 .features {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 2rem 0;
+  justify-content: center;
+  padding: 2rem 16px;
   width: 100%;
+  max-width: 996px;
+}
+
+.feature {
+  padding: 0 16px;
+  width: 300px;
+}
+
+@media screen and (max-width: 644px) {
+  .feature {
+    width: 100%;
+  }
 }
 
 .featureImage {

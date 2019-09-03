@@ -100,25 +100,23 @@ function Home() {
             </header>
             <main>
                 {features && features.length && (
-                    <section className={styles.features}>
-                        <div className="container">
-                            <div className="row">
-                                {features.map(({ imageUrl, title, description }, idx) => (
-                                    <div key={idx} className={classnames("col col--4", styles.feature)}>
-                                        {imageUrl && (
-                                            <div className="text--center">
-                                                <img
-                                                    className={styles.featureImage}
-                                                    src={withBaseUrl(imageUrl)}
-                                                    alt={title}
-                                                />
-                                            </div>
-                                        )}
-                                        <h3>{title}</h3>
-                                        <p>{description}</p>
-                                    </div>
-                                ))}
-                            </div>
+                    <section className={styles.sectionFeatures}>
+                        <div className={styles.features}>
+                            {features.map(({ imageUrl, title, description }, idx) => (
+                                <div key={idx} className={classnames("col_ col--4_", styles.feature)}>
+                                    {imageUrl && (
+                                        <div className="text--center">
+                                            <img
+                                                className={styles.featureImage}
+                                                src={withBaseUrl(imageUrl)}
+                                                alt={title}
+                                            />
+                                        </div>
+                                    )}
+                                    <h3>{title}</h3>
+                                    <p>{description}</p>
+                                </div>
+                            ))}
                         </div>
                     </section>
                 )}

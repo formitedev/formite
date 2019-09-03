@@ -5,7 +5,7 @@ title: Getting started
 ## Installation
 You can add Formite to your `package.json` file with NPM or Yarn.
 
-The package `formite-core` is required and you can install additional adapters like `formite-html` or `formite-components'.
+The package `formite-core` is required and you can install additional adapters like `formite-html` or `formite-components`.
 
 ```
 npm install formite-core formite-html --save
@@ -37,6 +37,18 @@ const SimpleForm = () => {
 ```
 
 ### Class components
+
+To use Formite with class components you need the `formite-core` and the `formite-components` package.
+
+```
+npm install formite-core formite-components --save
+```
+
+or
+
+```
+yarn add formite-core formite-components
+```
 
 The Formite's components use `children` as a render prop:
 
