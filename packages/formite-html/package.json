@@ -1,6 +1,6 @@
 {
   "name": "formite-html",
-  "version": "0.2.3",
+  "version": "1.0.0",
   "description": "Easy forms with React hooks and HTML inputs",
   "keywords": [
     "react",
@@ -35,7 +35,7 @@
     "watch-lib": "tsc -p ./tsconfig.build.json -w"
   },
   "devDependencies": {
-    "formite-core": "^0.2.3",
+    "formite-core": "^1.0.0",
     "formite-sample": "^1.0.0",
     "react": ">=16.8.0"
   },

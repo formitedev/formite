@@ -1,6 +1,6 @@
 {
   "name": "formite-core",
-  "version": "0.2.3",
+  "version": "1.0.0",
   "description": "Easy forms with React hooks",
   "keywords": [
     "react",
