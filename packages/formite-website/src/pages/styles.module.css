@@ -22,6 +22,12 @@
   justify-content: center;
 }
 
+/* Workaround: Missing border after publishing with Docosaurus */
+.getStarted {
+  border-width: 2px;
+  border-style: solid;
+}
+
 .features {
   display: flex;
   align-items: center;
